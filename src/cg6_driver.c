@@ -163,12 +163,8 @@ CG6GetRec(ScrnInfoPtr pScrn)
 static void
 CG6FreeRec(ScrnInfoPtr pScrn)
 {
-    Cg6Ptr pCg6;
-
     if (pScrn->driverPrivate == NULL)
 	return;
-
-    pCg6 = GET_CG6_FROM_SCRN(pScrn);
 
     free(pScrn->driverPrivate);
     pScrn->driverPrivate = NULL;
