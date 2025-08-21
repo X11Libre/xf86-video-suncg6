@@ -87,7 +87,7 @@ extern int  Cg6WindowPrivateIndex;
 
 #define Cg6GetWindowPrivate(w)						\
 ((Cg6StipplePtr) (w)->devPrivates[Cg6WindowPrivateIndex].ptr)
-                            
+
 #define Cg6SetWindowPrivate(w,p) 					\
 ((w)->devPrivates[Cg6WindowPrivateIndex].ptr = (pointer) p)
 

@@ -67,7 +67,7 @@ void CG6Sync(ScrnInfoPtr pScrn);
 #define CG6_MINOR_VERSION PACKAGE_VERSION_MINOR
 #define CG6_PATCHLEVEL PACKAGE_VERSION_PATCHLEVEL
 
-/* 
+/*
  * This contains the functions needed by the server after loading the driver
  * module.  It must be supplied, and gets passed back by the SetupProc
  * function in the dynamic case.  In the static case, a reference to this
@@ -235,7 +235,7 @@ CG6Probe(DriverPtr drv, int flags)
     numUsed = xf86MatchSbusInstances(CG6_NAME, SBUS_DEVICE_CG6,
 		   devSections, numDevSections,
 		   drv, &usedChips);
-				    
+
     free(devSections);
     if (numUsed <= 0)
 	return FALSE;
@@ -250,7 +250,7 @@ CG6Probe(DriverPtr drv, int flags)
 	 */
 	if(pEnt->active) {
 	    ScrnInfoPtr pScrn;
-	    
+
 	    /* Allocate a ScrnInfoRec and claim the slot */
 	    pScrn = xf86AllocateScreen(drv, 0);
 
@@ -292,7 +292,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
      * not at the start of each server generation.  This means that
      * only things that are persistent across server generations can
      * be initialised here.  xf86Screens[] is (pScrn is a pointer to one
-     * of these).  Privates allocated using xf86AllocateScrnInfoPrivateIndex()  
+     * of these).  Privates allocated using xf86AllocateScrnInfoPrivateIndex()
      * are too, and should be used for data that must persist across
      * server generations.
      *
@@ -305,7 +305,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
 	return FALSE;
     }
     pCg6 = GET_CG6_FROM_SCRN(pScrn);
-    
+
     /* Set pScrn->monitor */
     pScrn->monitor = pScrn->confScreen->monitor;
 
@@ -327,7 +327,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
     /*********************
     deal with depth
     *********************/
-    
+
     if (!xf86SetDepthBpp(pScrn, 8, 0, 0, NoDepth24Support)) {
 	return FALSE;
     } else {
@@ -351,7 +351,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
 	return FALSE;
     memcpy(pCg6->Options, CG6Options, sizeof(CG6Options));
     xf86ProcessOptions(pScrn->scrnIndex, pScrn->options, pCg6->Options);
-    
+
     if (!xf86SetDefaultVisual(pScrn, -1))
 	return FALSE;
 
@@ -371,7 +371,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
     from = X_DEFAULT;
 
     /* determine whether we use hardware or software cursor */
-    
+
     pCg6->HWCursor = TRUE;
     if (xf86GetOptValBool(pCg6->Options, OPTION_HW_CURSOR, &pCg6->HWCursor))
 	from = X_CONFIG;
@@ -379,7 +379,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
 	from = X_CONFIG;
 	pCg6->HWCursor = FALSE;
     }
-    
+
     xf86DrvMsg(pScrn->scrnIndex, from, "Using %s cursor\n",
 		pCg6->HWCursor ? "HW" : "SW");
 
@@ -387,7 +387,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
 	pCg6->NoAccel = TRUE;
 	xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "Acceleration disabled\n");
     }
-        
+
     if (xf86LoadSubModule(pScrn, "fb") == NULL) {
 	CG6FreeRec(pScrn);
 	return FALSE;
@@ -401,7 +401,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
     /*********************
     set up clock and mode stuff
     *********************/
-    
+
     pScrn->progClock = TRUE;
 
     if(pScrn->display->virtualX || pScrn->display->virtualY) {
@@ -473,7 +473,7 @@ CG6ScreenInit(SCREEN_INIT_ARGS_DECL)
 	return FALSE;
 
     miSetPixmapDepths ();
-	
+
     /*
      * Call the framebuffer layer's ScreenInit function, and fill in other
      * pScreen fields.
@@ -507,11 +507,11 @@ CG6ScreenInit(SCREEN_INIT_ARGS_DECL)
     /* Initialise cursor functions */
     miDCInitialize (pScreen, xf86GetPointerScreenFuncs());
 
-    /* Initialize HW cursor layer. 
+    /* Initialize HW cursor layer.
        Must follow software cursor initialization*/
-    if (pCg6->HWCursor) { 
+    if (pCg6->HWCursor) {
 	if(!CG6HWCursorInit(pScreen)) {
-	    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, 
+	    xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
 		       "Hardware cursor initialization failed\n");
 	    return(FALSE);
 	}
@@ -555,7 +555,7 @@ CG6SwitchMode(SWITCH_MODE_ARGS_DECL)
  * displayed location in the video memory.
  */
 /* Usually mandatory */
-static void 
+static void
 CG6AdjustFrame(ADJUST_FRAME_ARGS_DECL)
 {
     /* we don't support virtual desktops */
@@ -612,7 +612,7 @@ CG6CloseScreen(CLOSE_SCREEN_ARGS_DECL)
     xf86UnmapSbusMem(pCg6->psdp, pCg6->fbc,
 		     CG6_RAM_VOFF - CG6_FBC_VOFF +
 		     (pCg6->psdp->width * pCg6->psdp->height));
-    
+
     if (pCg6->HWCursor)
     	xf86SbusHideOsHwCursor(pCg6->psdp);
 
