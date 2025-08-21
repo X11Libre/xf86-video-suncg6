@@ -49,7 +49,7 @@ CG6LoadCursorImage(ScrnInfoPtr pScrn, unsigned char *src)
 	pCg6->thc->thc_cursbits[i] = *data++;
 }
 
-static void 
+static void
 CG6ShowCursor(ScrnInfoPtr pScrn)
 {
     Cg6Ptr pCg6 = GET_CG6_FROM_SCRN(pScrn);
@@ -89,7 +89,7 @@ CG6SetCursorColors(ScrnInfoPtr pScrn, int bg, int fg)
     }
 }
 
-Bool 
+Bool
 CG6HWCursorInit(ScreenPtr pScreen)
 {
     ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
@@ -103,7 +103,7 @@ CG6HWCursorInit(ScreenPtr pScreen)
 
     infoPtr = xf86CreateCursorInfoRec();
     if(!infoPtr) return FALSE;
-    
+
     pCg6->CursorInfoRec = infoPtr;
 
     infoPtr->MaxWidth = 32;

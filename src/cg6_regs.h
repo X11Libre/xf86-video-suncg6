@@ -136,7 +136,7 @@ typedef struct cg6_fbc {
 	unsigned int		xxx0[1];
 	volatile unsigned int	mode;
 	volatile unsigned int	clip;
-	unsigned int		xxx1[1];	    
+	unsigned int		xxx1[1];
 	volatile unsigned int	s;
 	volatile unsigned int	draw;
 	volatile unsigned int	blit;
