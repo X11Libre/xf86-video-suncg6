@@ -14,7 +14,7 @@ suncg6 \- GX/Turbo GX video driver
 .SH DESCRIPTION
 .B suncg6
 is an
-.B Xorg
+.B XLibre
 driver for Sun GX and Turbo GX (also known as cgsix) video cards.
 THIS MAN PAGE NEEDS TO BE FILLED IN.
 .SH SUPPORTED HARDWARE
@@ -29,7 +29,7 @@ Please refer to
 for general configuration details.
 This section only covers configuration details specific to this driver.
 .SH "SEE ALSO"
-.BR Xorg (1),
+.BR XLibre (1),
 .BR Xserver (1),
 .BR xorg.conf (5),
 .BR X (7)
