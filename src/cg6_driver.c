@@ -98,8 +98,6 @@ static const OptionInfoRec CG6Options[] = {
     { -1,			NULL,		OPTV_NONE,	{0}, FALSE }
 };
 
-#ifdef XFree86LOADER
-
 static MODULESETUPPROTO(cg6Setup);
 
 static XF86ModuleVersionInfo suncg6VersRec =
@@ -142,8 +140,6 @@ cg6Setup(pointer module, pointer opts, int *errmaj, int *errmin)
 	return NULL;
     }
 }
-
-#endif /* XFree86LOADER */
 
 static Bool
 CG6GetRec(ScrnInfoPtr pScrn)
