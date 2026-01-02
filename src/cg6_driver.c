@@ -33,26 +33,24 @@
 #include "xf86cmap.h"
 #include "cg6.h"
 
-#include "compat-api.h"
-
 static const OptionInfoRec * CG6AvailableOptions(int chipid, int busid);
 static void	CG6Identify(int flags);
 static Bool	CG6Probe(DriverPtr drv, int flags);
 static Bool	CG6PreInit(ScrnInfoPtr pScrn, int flags);
-static Bool	CG6ScreenInit(SCREEN_INIT_ARGS_DECL);
-static Bool	CG6EnterVT(VT_FUNC_ARGS_DECL);
-static void	CG6LeaveVT(VT_FUNC_ARGS_DECL);
-static Bool	CG6CloseScreen(CLOSE_SCREEN_ARGS_DECL);
+static Bool	CG6ScreenInit(ScreenPtr pScreen, int argc, char **argv);
+static Bool	CG6EnterVT(ScrnInfoPtr arg);
+static void	CG6LeaveVT(ScrnInfoPtr arg);
+static Bool	CG6CloseScreen(ScreenPtr pScreen);
 static Bool	CG6SaveScreen(ScreenPtr pScreen, int mode);
 
 /* Required if the driver supports mode switching */
-static Bool	CG6SwitchMode(SWITCH_MODE_ARGS_DECL);
+static Bool	CG6SwitchMode(ScrnInfoPtr arg, DisplayModePtr mode);
 /* Required if the driver supports moving the viewport */
-static void	CG6AdjustFrame(ADJUST_FRAME_ARGS_DECL);
+static void	CG6AdjustFrame(ScrnInfoPtr arg, int x, int y);
 
 /* Optional functions */
-static void	CG6FreeScreen(FREE_SCREEN_ARGS_DECL);
-static ModeStatus CG6ValidMode(SCRN_ARG_TYPE arg, DisplayModePtr mode,
+static void	CG6FreeScreen(ScrnInfoPtr arg);
+static ModeStatus CG6ValidMode(ScrnInfoPtr arg, DisplayModePtr mode,
 			       Bool verbose, int flags);
 
 void CG6Sync(ScrnInfoPtr pScrn);
@@ -419,7 +417,7 @@ CG6PreInit(ScrnInfoPtr pScrn, int flags)
 /* This gets called at the start of each server generation */
 
 static Bool
-CG6ScreenInit(SCREEN_INIT_ARGS_DECL)
+CG6ScreenInit(ScreenPtr pScreen, int argc, char **argv)
 {
     ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
     Cg6Ptr pCg6;
@@ -537,7 +535,7 @@ CG6ScreenInit(SCREEN_INIT_ARGS_DECL)
 
 /* Usually mandatory */
 static Bool
-CG6SwitchMode(SWITCH_MODE_ARGS_DECL)
+CG6SwitchMode(ScrnInfoPtr arg, DisplayModePtr mode)
 {
     return TRUE;
 }
@@ -549,7 +547,7 @@ CG6SwitchMode(SWITCH_MODE_ARGS_DECL)
  */
 /* Usually mandatory */
 static void
-CG6AdjustFrame(ADJUST_FRAME_ARGS_DECL)
+CG6AdjustFrame(ScrnInfoPtr arg, int x, int y)
 {
     /* we don't support virtual desktops */
     return;
@@ -562,9 +560,8 @@ CG6AdjustFrame(ADJUST_FRAME_ARGS_DECL)
 
 /* Mandatory */
 static Bool
-CG6EnterVT(VT_FUNC_ARGS_DECL)
+CG6EnterVT(ScrnInfoPtr pScrn)
 {
-    SCRN_INFO_PTR(arg);
     Cg6Ptr pCg6 = GET_CG6_FROM_SCRN(pScrn);
 
     if (pCg6->HWCursor) {
@@ -582,7 +579,7 @@ CG6EnterVT(VT_FUNC_ARGS_DECL)
 
 /* Mandatory */
 static void
-CG6LeaveVT(VT_FUNC_ARGS_DECL)
+CG6LeaveVT(ScrnInfoPtr arg)
 {
     return;
 }
@@ -595,7 +592,7 @@ CG6LeaveVT(VT_FUNC_ARGS_DECL)
 
 /* Mandatory */
 static Bool
-CG6CloseScreen(CLOSE_SCREEN_ARGS_DECL)
+CG6CloseScreen(ScreenPtr pScreen)
 {
     ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
     Cg6Ptr pCg6 = GET_CG6_FROM_SCRN(pScrn);
@@ -610,7 +607,7 @@ CG6CloseScreen(CLOSE_SCREEN_ARGS_DECL)
     	xf86SbusHideOsHwCursor(pCg6->psdp);
 
     pScreen->CloseScreen = pCg6->CloseScreen;
-    return (*pScreen->CloseScreen)(CLOSE_SCREEN_ARGS);
+    return (*pScreen->CloseScreen)(pScreen);
 }
 
 
@@ -618,9 +615,8 @@ CG6CloseScreen(CLOSE_SCREEN_ARGS_DECL)
 
 /* Optional */
 static void
-CG6FreeScreen(FREE_SCREEN_ARGS_DECL)
+CG6FreeScreen(ScrnInfoPtr pScrn)
 {
-    SCRN_INFO_PTR(arg);
     CG6FreeRec(pScrn);
 }
 
@@ -629,7 +625,7 @@ CG6FreeScreen(FREE_SCREEN_ARGS_DECL)
 
 /* Optional */
 static ModeStatus
-CG6ValidMode(SCRN_ARG_TYPE arg, DisplayModePtr mode, Bool verbose, int flags)
+CG6ValidMode(ScrnInfoPtr arg, DisplayModePtr mode, Bool verbose, int flags)
 {
     if (mode->Flags & V_INTERLACE)
 	return(MODE_BAD);
