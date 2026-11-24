@@ -61,6 +61,7 @@ void CG6Sync(ScrnInfoPtr pScrn);
 #define CG6_MAJOR_VERSION PACKAGE_VERSION_MAJOR
 #define CG6_MINOR_VERSION PACKAGE_VERSION_MINOR
 #define CG6_PATCHLEVEL PACKAGE_VERSION_PATCHLEVEL
+#define CG6_VERSION_SUFFIX PACKAGE_VERSION_SUFFIX
 
 /*
  * This contains the functions needed by the server after loading the driver
@@ -110,6 +111,9 @@ static XF86ModuleVersionInfo suncg6VersRec =
 };
 
 _X_EXPORT XF86ModuleData suncg6ModuleData = { &suncg6VersRec, cg6Setup, NULL };
+#ifdef XF86_MODULE_VERSION_SUFFIX
+XF86_MODULE_VERSION_SUFFIX(suncg6, CG6_VERSION_SUFFIX);
+#endif
 
 void *
 cg6Setup(void *module, void *opts, int *errmaj, int *errmin)
